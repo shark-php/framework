@@ -1,7 +1,7 @@
 {
   "name": "shark-php/framework",
   "description": "The Shark Php Framework",
-  "keywords": ["shark", "reactphp", "framework" , "async", "loop", "php", "shark-php", "shark-php/framework"],
+  "keywords": ["shark", "reactphp", "framework" , "async", "loop", "php", "shark-php"],
   "license": "MIT",
   "authors": [
     {
