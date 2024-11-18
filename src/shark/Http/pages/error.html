@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - {:status} Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            font-size: 4rem;
+            margin: 0.5rem 0;
+            color: #e74c3c;
+        }
+        h2 {
+            font-size: 1.5rem;
+            color: #666;
+            margin: 0.5rem 0;
+        }
+        p {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+        .btn {
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            margin-top: 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Error <span id="status-code">{:status}</span></h1>
+    <h2 id="status-message">{:title}</h2>
+    <p>{:messages}</p>
+    <a href="{:url}" class="btn">Go Back Home</a>
+</div>
+</body>
+</html>
