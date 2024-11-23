@@ -23,6 +23,6 @@ class Cron {
      */
     public function job(callable $handler, int $duration): void
     {
-        $this->loop->addPeriodicTimer(60,$handler);
+        $this->loop->addPeriodicTimer($duration,$handler);
     }
 }
