@@ -26,9 +26,9 @@ class StaticFileMiddleware
             $file = await($this->filesystem->get($request->getUri()->getPath()));
             if ($file)
                 return new Response(200, ['Content-Type' => $file->mimeType],$file->contents);
-        } catch (FileNotFoundException $e) {
-            return $next($request);
-        }
 
+        } catch (FileNotFoundException $e) {}
+
+        return $next($request);
     }
 }
