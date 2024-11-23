@@ -27,7 +27,8 @@
     "nilportugues/sql-query-builder": "^1.8",
     "react/mysql": "^0.6.0",
     "respect/validation": "^2.3",
-    "ext-pcntl": "*"
+    "ext-pcntl": "*",
+    "bramus/monolog-colored-line-formatter": "^3.1"
   },
   "autoload": {
     "psr-4": {
