@@ -302,6 +302,18 @@ class Shark
     }
 
     /**
+     * Get http Server instance
+     *
+     * @return Http|null
+     */
+    public function getHttpServer() : ?Http
+    {
+        return $this->createHttpServer();
+    }
+
+    /**
+     * Get Database instance
+     *
      * @throws UnknownDatabaseDriverException
      */
     public function getDatabaseDriver(string|DatabaseConfig $config = ""): DriverInterface
