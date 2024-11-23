@@ -2,28 +2,33 @@
 namespace Shark\Http\Middlewares;
 
 use Psr\Http\Message\ServerRequestInterface;
+use React\Http\Message\Response;
 use React\Promise\PromiseInterface;
+use Shark\Filesystem\Contracts\FilesystemInterface;
 use Shark\Filesystem\Entities\File;
+use Shark\Filesystem\Exceptions\FileNotFoundException;
+use function React\Async\await;
 
 class StaticFileMiddleware
 {
-    public function __construct()
+    public function __construct(
+        private readonly FilesystemInterface $filesystem
+    )
     {
     }
 
-    public function __invoke(ServerRequestInterface $request,string $file): PromiseInterface
+    public function __invoke(ServerRequestInterface $request, callable $next)
     {
-        return $this->query->Execute($request->getUri()->getPath())
-            ->then(
-                function (?File $file) {
-                    if($file)
-                        return Helpers::response($file->contents,200, ['Content-Type' => $file->mimeType]);
-                    return JsonResponse::notFound("Route not found!");
-                }
-            )->otherwise(
-                function (\Exception $exception) {
-                    return Helpers::response($exception->getMessage(),500);
-                }
-            );
+        /**
+         * @var ?File $file
+         */
+        try {
+            $file = await($this->filesystem->get($request->getUri()->getPath()));
+            if ($file)
+                return new Response(200, ['Content-Type' => $file->mimeType],$file->contents);
+        } catch (FileNotFoundException $e) {
+            return $next($request);
+        }
+
     }
 }

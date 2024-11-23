@@ -10,8 +10,9 @@ use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Socket\SocketServer;
 use Shark\DI\DependencyResolver;
+use Shark\Filesystem\Contracts\FilesystemInterface;
 use Shark\Http\Middlewares\SharkMiddleware;
-use Shark\Http\Middlewares\JsonRequestDecoder;
+use Shark\Http\Middlewares\StaticFileMiddleware;
 use Shark\Http\Route\Dispatcher\RouteDispatcher;
 use Shark\Http\Route\Router;
 use Shark\Http\Route\RouteResolver;
@@ -86,6 +87,7 @@ class Http
             new RequestBodyBufferMiddleware($this->getConfig("buffer_size")),
             new RequestBodyParserMiddleware($this->getConfig("upload_max_file_size"), $this->getConfig("upload_max_file_count")), // 8 MiB
             new SharkMiddleware($this->ws),
+            new StaticFileMiddleware($this->resolver->get(FilesystemInterface::class)),
             ...$chain
         );
 
