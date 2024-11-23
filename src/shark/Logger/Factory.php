@@ -3,6 +3,7 @@
 
 namespace Shark\Logger;
 
+use Bramus\Monolog\Formatter\ColoredLineFormatter;
 use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Handler\FirePHPHandler;
@@ -71,11 +72,15 @@ class Factory
      * @param bool $file
      * @return LoggerInterface
      */
-    public static function create(string $logger_path, string $app_name = "", string $level = self::Error,bool  $std = true, bool $file = false): LoggerInterface
+    public static function create(string $logger_path = "", string $app_name = "", string $level = self::Error,bool  $std = true, bool $file = false): LoggerInterface
     {
         $handler = [];
-        if ($std)
-            $handler[] = new StreamHandler('php://output', Level::fromName($level));
+        if ($std){
+            $stdHandler = new StreamHandler('php://output', Level::fromName($level));
+            $stdHandler->setFormatter(new ColoredLineFormatter());
+            $handler[] = $stdHandler;
+        }
+
         if ($file)
             $handler[] =  new StreamHandler($logger_path, Level::fromName($level));
         $handler[] =   new FirePHPHandler();
