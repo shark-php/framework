@@ -43,7 +43,7 @@ class Shark
 
     const ROOT_PATH_KEY = "_root_path_key";
 
-    private static self $instance;
+    private static ?self $instance = null;
 
     private LoopInterface $loop;
 
@@ -90,6 +90,9 @@ class Shark
      */
     public static function createShark(?SharkOption $options = null) : self
     {
+        if (!$options)
+            $options = new SharkOption(__DIR__);
+
         $shark = new self($options->root_path);
         $config_path = $options->config_path;
         if ($config_path != "") {
@@ -380,14 +383,13 @@ class Shark
      * Run application
      *
      * @return void
-     * @throws Exception
      */
     public function run(): void
     {
         $anyRunService = $this->runHttpServer();
 
         if (!$anyRunService)
-            throw new Exception("There is no service to run");
+            $this->logger()->warning("There is no runnable service");
 
         $this->loop->run();
     }

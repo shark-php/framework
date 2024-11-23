@@ -9,3 +9,6 @@ Thumbs.db
 /.fleet
 /.vscode
 .phpunit.result.cache
+
+#main file for test
+main.php
