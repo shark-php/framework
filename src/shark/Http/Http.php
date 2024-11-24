@@ -93,6 +93,12 @@ class Http
 
         $http->listen($this->ws);
 
+        logger()->info("Http server runs on : ".  sprintf(
+                           "%s:%d",
+                           $this->getConfig("socket"),
+                           $this->getConfig("port")
+                       ));
+
         $this->ws->on("error" , fn(\Throwable $exception) => logger()->error($exception->getMessage(),[$exception]));
     }
 

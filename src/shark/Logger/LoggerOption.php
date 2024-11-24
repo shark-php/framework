@@ -8,7 +8,8 @@ class LoggerOption
         public string $path = "/storage/logs/app.log",
         public string $level = Factory::Info,
         public bool  $std = true,
-        public bool $file = false
+        public bool $file = false,
+        public string $formatter = Factory::COLOR_FORMATTER
     )
     {
     }

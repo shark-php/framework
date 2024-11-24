@@ -103,6 +103,8 @@ class Shark
         $shark->resolveFilesystem($options->storage_path);
         $shark->resolveLogger($options->logger);
 
+        $shark->logger()->info("Shark Application initialized successfully");
+
         return self::$instance = $shark;
     }
 
@@ -494,7 +496,8 @@ class Shark
             $this->getConfig("app_name","Shark"),
             $loggerOption->level,
             $loggerOption->std,
-            $loggerOption->file
+            $loggerOption->file,
+            $loggerOption->formatter,
         );
     }
 

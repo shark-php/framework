@@ -4,6 +4,7 @@
 namespace Shark\Logger;
 
 use Bramus\Monolog\Formatter\ColoredLineFormatter;
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Handler\FirePHPHandler;
@@ -12,6 +13,10 @@ use Psr\Log\LoggerInterface;
 
 class Factory
 {
+    const JSON_FORMATTER = "json";
+
+    const COLOR_FORMATTER = "color";
+
     /**
      * Detailed debug information
      */
@@ -72,12 +77,20 @@ class Factory
      * @param bool $file
      * @return LoggerInterface
      */
-    public static function create(string $logger_path = "", string $app_name = "", string $level = self::Error,bool  $std = true, bool $file = false): LoggerInterface
+    public static function create(string $logger_path = "", string $app_name = "", string $level = self::Error,bool  $std = true, bool $file = false,string $formatter = self::JSON_FORMATTER ): LoggerInterface
     {
         $handler = [];
         if ($std){
             $stdHandler = new StreamHandler('php://output', Level::fromName($level));
-            $stdHandler->setFormatter(new ColoredLineFormatter());
+            switch ($formatter){
+                case self::COLOR_FORMATTER:
+                    $stdHandler->setFormatter(new ColoredLineFormatter());
+                    break;
+                case self::JSON_FORMATTER:
+                    $stdHandler->setFormatter(new JsonFormatter());
+                    break;
+            }
+
             $handler[] = $stdHandler;
         }
 
