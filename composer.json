@@ -25,7 +25,7 @@
     "illuminate/config": "^11.29",
     "monolog/monolog": "^3.7",
     "nilportugues/sql-query-builder": "^1.8",
-    "react/mysql": "^0.6.0",
+    "react/mysql": "^0.7.x-dev",
     "respect/validation": "^2.3",
     "ext-pcntl": "*",
     "bramus/monolog-colored-line-formatter": "^3.1"

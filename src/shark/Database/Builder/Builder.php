@@ -8,7 +8,7 @@ use NilPortugues\Sql\QueryBuilder\Manipulation\AbstractBaseQuery;
 use NilPortugues\Sql\QueryBuilder\Manipulation\Select;
 use NilPortugues\Sql\QueryBuilder\Syntax\OrderBy;
 use NilPortugues\Sql\QueryBuilder\Syntax\Where;
-use React\MySQL\QueryResult;
+use React\Mysql\MysqlResult;
 use React\Promise\PromiseInterface;
 use Shark\Database\Interfaces\DriverInterface;
 use Shark\Database\Paginator\SimplePaginatorTrait;
@@ -45,7 +45,7 @@ class Builder
 
         return $driver
             ->exec($sql,$values)
-            ->then(function(QueryResult $result) {
+            ->then(function(MysqlResult $result) {
                 return $this->checkResultRow($result);
             });
     }
@@ -63,7 +63,7 @@ class Builder
 
         return $driver
             ->exec($sql,$values)
-            ->then(function(QueryResult $result){
+            ->then(function(MysqlResult $result){
                 return $result->resultRows;
             });
     }
@@ -72,7 +72,7 @@ class Builder
      * Exec a Query
      *
      * @param DriverInterface $driver
-     * @return PromiseInterface<QueryResult>
+     * @return PromiseInterface<MysqlResult>
      */
     public function execQuery(DriverInterface $driver) : PromiseInterface
     {
@@ -81,7 +81,7 @@ class Builder
 
         return $driver
             ->exec($sql,$values)
-            ->then(function(QueryResult $result){
+            ->then(function( MysqlResult $result){
                 return $result;
             });
     }
@@ -283,7 +283,7 @@ class Builder
     }
 
     
-    private function checkResultRow(QueryResult $result) : ?array {
+    private function checkResultRow(MysqlResult $result) : ?array {
         if (!@$result->resultRows[0])
             return null;
         return $result->resultRows[0];
@@ -303,7 +303,7 @@ class Builder
 
         return $driver
             ->exec($sql,$values)
-            ->then(function(QueryResult $result) use ($per_page,$page,$count){
+            ->then(function(MysqlResult $result) use ($per_page,$page,$count){
                 return $this->simplePaginateResponse($result->resultRows,$per_page,$page,$count);
             });
     }
@@ -326,11 +326,11 @@ class Builder
         $values = $this->builder->getValues();
         $count =  await($driver
             ->exec($count_sql,$count_values)
-            ->then(function(QueryResult $result) use ($per_page,$page){
+            ->then(function(MysqlResult $result) use ($per_page,$page){
                 return $result->resultRows[0]["COUNT(*)"];
             }));
 
-        return $driver->exec($sql,$values)->then(function(QueryResult $result) use ($per_page,$page,$count){
+        return $driver->exec($sql,$values)->then(function(MysqlResult $result) use ($per_page,$page,$count){
             return $this->paginateResponse($result->resultRows,$per_page,$page,$count);
         });
     }

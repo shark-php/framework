@@ -4,12 +4,12 @@
 namespace Shark\Database\Drivers\Mysql;
 
 
-
-use React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
-use React\MySQL\Factory as Mysql;
+use React\Mysql\MysqlClient;
 use Shark\Database\Interfaces\DriverInterface;
 use Shark\Database\Interfaces\HandlerInterface;
+use function LaravelIdea\throw_if;
+use function React\Async\await;
 
 class MysqlFactory implements HandlerInterface
 {
@@ -18,7 +18,7 @@ class MysqlFactory implements HandlerInterface
     private string $host;
     private string $port;
     private string $database;
-    private Mysql $connection;
+    private ?MysqlClient $connection = null;
 
     public function __construct(
         private readonly LoopInterface $loop,
@@ -29,19 +29,25 @@ class MysqlFactory implements HandlerInterface
         string                         $host
     )
     {
-        $mysql = new Mysql($this->loop);
-
         $this->database     = $database;
         $this->port         = $port;
         $this->username     = $username;
         $this->password     = $password;
         $this->host         = $host;
-        $this->connection   = $mysql;
     }
 
     public function getDriver(): DriverInterface
     {
-        return new MysqlDriver( $this->connection->createLazyConnection( $this->getConfig() ) );
+        if (!$this->connection){
+            $this->connection = new  MysqlClient(uri: $this->getConfig(), loop: $this->loop);
+        }
+        try {
+            await($this->connection->ping());
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+
+        return new MysqlDriver( $this->connection );
     }
 
     private function getConfig(): string

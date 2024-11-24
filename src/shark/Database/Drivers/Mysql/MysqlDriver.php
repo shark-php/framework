@@ -1,19 +1,19 @@
 <?php
 namespace Shark\Database\Drivers\Mysql;
 
+use React\Mysql\MysqlClient;
 use Shark\Database\Interfaces\DriverInterface;
-use React\MySQL\ConnectionInterface;
 use React\Promise\PromiseInterface;
 use function React\Promise\reject;
 
 class MysqlDriver implements DriverInterface
 {
     /**
-     * @var ConnectionInterface
+     * @var MysqlClient
      */
-    private ConnectionInterface $instance;
+    private MysqlClient $instance;
 
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(MysqlClient $connection)
     {
         $this->instance = $connection;
     }
